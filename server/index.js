@@ -14,14 +14,6 @@ app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-io.on('connection', (socket) => {
-    console.log('connect');
-    var callback = (data) => {
-        console.log('callback');
-        socket.emit('new_message', data);
-    }
-    twit.directMessageStream(callback);
-});
 app.get('/favorite/list', (req, res) => {
     twitterApi.getFavoriteList().then(data => {
         res.send(data)

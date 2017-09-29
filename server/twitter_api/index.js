@@ -27,22 +27,6 @@ var getUser = (id) => {
         user_id: id,
     })
 }
-// var createMessage = ({id, text}) => {
-//     console.log(id, text);
-//     return twitter.get('direct_messages/events/new',{
-//         event: {
-//           type: "message_create",
-//           message_create: {
-//             target: {
-//               recipient_id: id
-//             },
-//             message_data: {
-//               text: text,
-//             }
-//           }
-//         }
-//     })
-// }
 var directMessageList = () => twitter.get('direct_messages/events/list');
 
 var searchUser = (query) => {
@@ -50,6 +34,23 @@ var searchUser = (query) => {
         q: query,
     });
 }
+var createMessage = ({id, text}) => {
+    console.log(id, text);
+    return twitter.get('direct_messages/events/new',{
+        event: {
+          type: "message_create",
+          message_create: {
+            target: {
+              recipient_id: id
+            },
+            message_data: {
+              text: text,
+            }
+          }
+        }
+    })
+}
+var directMessageList = () => twitter.get('direct_messages/events/list');
 
 module.exports = {
     getUserTimeLine,
@@ -57,5 +58,6 @@ module.exports = {
     searchTweets,
     directMessageList,
     getUser,
-    searchUser
+    searchUser,
+    createMessage
 };
