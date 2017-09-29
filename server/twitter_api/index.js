@@ -21,8 +21,34 @@ var searchTweets = (query) => {
         count: 2
     });
 }
+var getUser = (id) => {
+    return twitter.get('users/show', {
+        user_id: id,
+    })
+}
+var createMessage = ({id, text}) => {
+    console.log(id, text);
+    return twitter.get('direct_messages/events/new',{
+        event: {
+          type: "message_create",
+          message_create: {
+            target: {
+              recipient_id: id
+            },
+            message_data: {
+              text: text,
+            }
+          }
+        }
+    })
+}
+var directMessageList = () => twitter.get('direct_messages/events/list');
+
 module.exports = {
     getUserTimeLine,
     getFavoriteList,
-    searchTweets
+    searchTweets,
+    directMessageList,
+    getUser,
+    createMessage
 };
