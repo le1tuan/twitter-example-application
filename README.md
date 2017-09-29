@@ -5,6 +5,6 @@ Basic Config to develop ReactJs
   - npm install
   - npm start
 ## How to run server:
-  - cd server
-  - npm run config
-  - npm start
+- cd server
+- npm run config
+- npm start
