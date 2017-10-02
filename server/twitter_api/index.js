@@ -1,10 +1,11 @@
 var tw = require('twitter');
+var config = require('./config');
 // File Config
 var twitter = new tw({
-    consumer_key: "k7uj4qFbAl3bTlpsCyJAv0Kz8",
-    consumer_secret: "jxYLS0F14lBGVnjWv6QbxnWNSlmPb3jUrJj7WtKe4JQBBqD9Ug",
-    access_token_key: "2653641894-Ptr9GzokkWERWaH1xDR0fupBPVQ8fT1qrnsW806",
-    access_token_secret: "eSPRYeTDRCBwORqBSW7IvzWvCpHdWflLLwHKZ3HTusBJm",
+    consumer_key: config.consumer_key,
+    consumer_secret: config.consumer_secret,
+    access_token_key: config.access_token_key,
+    access_token_secret: config.access_token_secret,
 });
 
 var params = {screen_name: 'nodejs'};
@@ -26,22 +27,22 @@ var getUser = (id) => {
         user_id: id,
     })
 }
-var createMessage = ({id, text}) => {
-    console.log(id, text);
-    return twitter.get('direct_messages/events/new',{
-        event: {
-          type: "message_create",
-          message_create: {
-            target: {
-              recipient_id: id
-            },
-            message_data: {
-              text: text,
-            }
-          }
-        }
-    })
-}
+// var createMessage = ({id, text}) => {
+//     console.log(id, text);
+//     return twitter.get('direct_messages/events/new',{
+//         event: {
+//           type: "message_create",
+//           message_create: {
+//             target: {
+//               recipient_id: id
+//             },
+//             message_data: {
+//               text: text,
+//             }
+//           }
+//         }
+//     })
+// }
 var directMessageList = () => twitter.get('direct_messages/events/list');
 
 module.exports = {
@@ -49,6 +50,5 @@ module.exports = {
     getFavoriteList,
     searchTweets,
     directMessageList,
-    getUser,
-    createMessage
+    getUser
 };

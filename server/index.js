@@ -4,6 +4,7 @@ var cors = require('cors');
 var moment = require('moment');
 var bodyParser = require('body-parser')
 var multer = require('multer');
+var twit = require('./twitter_api/twit.js');
 //Callback functions
 var app = express();
 // var sendResult = (res) => {
@@ -35,7 +36,6 @@ app.get('/search/tweets', (req,res) => {
 app.get('/direct_messages/events/list', (req, res) => {
     twitterApi.directMessageList().then(tweet => {
         var time = moment.utc(parseInt(tweet.events[0].created_timestamp));
-
         twitterApi.getUser(tweet.events[0].message_create.target.recipient_id).then(data => {
             res.send({
                 recipient: {
@@ -51,14 +51,14 @@ app.get('/direct_messages/events/list', (req, res) => {
     })
 });
 app.post('/direct_messages/events/new',(req, res) => {
-    twitterApi.createMessage({
-        id: "829924335947182082",
-        text: req.body.text 
-    }).then(tweet => {
-        console.log(tweet);
-    }).catch(e => {
-        console.log(e);
+    var id = "829924335947182082";
+    twit.createMessage(id, req.body.text)
+    .then(data => {
+        res.send(data);
     })
+    .catch( e => {
+        console.log(e)
+    });
 })
 app.listen(4000,() => {
     console.log('Server run: http://localhost:4000')
