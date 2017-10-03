@@ -5,17 +5,23 @@ var moment = require('moment');
 var bodyParser = require('body-parser')
 var multer = require('multer');
 var twit = require('./twitter_api/twit.js');
+var server = require('http');
 //Callback functions
 var app = express();
-// var sendResult = (res) => {
-//     return (data) => {
-//         res.send(data);
-//     }
-// }
+server = server.Server(app);
+var io = require('socket.io')(server);
 app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+io.on('connection', (socket) => {
+    console.log('connect');
+    var callback = (data) => {
+        console.log('callback');
+        socket.emit('new_message', data);
+    }
+    twit.directMessageStream(callback);
+});
 app.get('/favorite/list', (req, res) => {
     twitterApi.getFavoriteList().then(data => {
         res.send(data)
@@ -51,7 +57,7 @@ app.get('/direct_messages/events/list', (req, res) => {
     })
 });
 app.post('/direct_messages/events/new',(req, res) => {
-    var id = "829924335947182082";
+    var id = "2653641894";
     twit.createMessage(id, req.body.text)
     .then(data => {
         res.send(data);
@@ -60,6 +66,6 @@ app.post('/direct_messages/events/new',(req, res) => {
         console.log(e)
     });
 })
-app.listen(4000,() => {
+server.listen(4000,() => {
     console.log('Server run: http://localhost:4000')
 })

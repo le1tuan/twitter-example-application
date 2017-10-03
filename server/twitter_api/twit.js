@@ -6,6 +6,7 @@ var Twitter = new twit({
     access_token: config.access_token_key,
     access_token_secret: config.access_token_secret,
 });
+var streamUser =  Twitter.stream('user');
 var createMessage = (id, text) => {
     return Twitter.post('direct_messages/events/new', {
         event: {
@@ -21,7 +22,18 @@ var createMessage = (id, text) => {
         }
     });
 }
+var directMessageStream = (callback) => {
+    streamUser.on('direct_message', (message) => {
+        console.log('newwwww messsage');
+        const data = {
+            text: message.direct_message.text,
+            screen_name: message.direct_message.sender.screen_name,
+        }
+        callback(data);
+    });
+}
 
 module.exports = {
     createMessage,
+    directMessageStream
 }

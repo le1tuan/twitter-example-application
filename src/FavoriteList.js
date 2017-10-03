@@ -1,26 +1,28 @@
 import React from 'react';
 import 'whatwg-fetch';
 import Linkify from 'react-linkify';
+import Message from './Message';
 class FavoriteList extends React.PureComponent {
     constructor(props){
-        super();
+        super(props);
         this.state = {
             inputValue: '',
             data: '',
         }
+        this.baseUrl = 'http://localhost:4000/';
     }
     componentDidMount(){
-        this.baseUrl = 'http://localhost:4000/search/tweets';
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        var url = `${this.baseUrl}?q=${this.state.inputValue}`
-        fetch(url).then(data => {
-            return data.json();
-        }).then(data => {
-            console.log(data)
-            this.setState({
-                data: data
+        var url = `${this.baseUrl}direct_messages/events/new`
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: this.state.inputValue
             })
         });
     }
@@ -34,8 +36,9 @@ class FavoriteList extends React.PureComponent {
         return(
             <div>
                 <input type="text" onChange={this.handleChange}/>
-                <button type="submit" onClick={this.handleSubmit}>Search</button>
+                <button onClick={this.handleSubmit}>submit</button>
                 {this.state.data !== '' && <div><Linkify>{this.state.data.text}</Linkify></div> }
+                <Message/>
             </div>
         )
     }
