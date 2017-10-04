@@ -32,6 +32,7 @@ class Search extends React.Component {
     render(){
         const content = this.state.list.map(x => {
             return (<div key={x.id}>
+                        <img src={x.profile_image_url}/>
                         <p>{x.screen_name}</p>
                         <Link to={`/message/${x.id}`} >Message</Link>
                     </div>)
