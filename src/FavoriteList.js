@@ -10,10 +10,12 @@ class FavoriteList extends React.PureComponent {
             data: '',
         }
         this.baseUrl = 'http://localhost:4000/';
+        this.timeOut = '';
     }
     componentDidMount(){
     }
     handleSubmit = (e) => {
+        console.log(e);
         e.preventDefault();
         var url = `${this.baseUrl}direct_messages/events/new`
         fetch(url,{
@@ -22,23 +24,28 @@ class FavoriteList extends React.PureComponent {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                id: this.props.match.params.id,
                 text: this.state.inputValue
             })
         });
+        this.setState({
+            inputValue: '',
+        })
     }
     handleChange = (e) => {
         e.preventDefault();
+        let event = e;
+        const input = e.target.value;
         this.setState({
-            inputValue: e.target.value,
-        })
+            inputValue: input,
+        });
     }
     render(){
         return(
             <div>
-                <input type="text" onChange={this.handleChange}/>
+                <input type="text" onChange={this.handleChange} value={this.state.inputValue} />
                 <button onClick={this.handleSubmit}>submit</button>
-                {this.state.data !== '' && <div><Linkify>{this.state.data.text}</Linkify></div> }
-                <Message/>
+                <Message id={this.props.match.params.id}/>
             </div>
         )
     }

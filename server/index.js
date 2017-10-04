@@ -32,13 +32,25 @@ app.get('/statuses/user_timeline', (req, res) => {
         res.send(data);
     })
 });
-app.get('/search/tweets', (req,res) => {
+app.get('/search/tweets', (req, res) => {
     var query = req.query.q;
     twitterApi.searchTweets(query)
     .then(tweet => {
        res.send(tweet.statuses[0]);
     })
 });
+app.get('/users/search', (req, res) => {
+    var query = req.query.q;
+    console.log(query);
+    twitterApi.searchUser(query)
+    .then(tweet => {
+        console.log(tweet);
+        res.send(tweet);
+    })
+    .catch(e => {
+        console.log(e);
+    })
+})
 app.get('/direct_messages/events/list', (req, res) => {
     twitterApi.directMessageList().then(tweet => {
         var time = moment.utc(parseInt(tweet.events[0].created_timestamp));
@@ -57,7 +69,7 @@ app.get('/direct_messages/events/list', (req, res) => {
     })
 });
 app.post('/direct_messages/events/new',(req, res) => {
-    var id = "2653641894";
+    var id = req.body.id;
     twit.createMessage(id, req.body.text)
     .then(data => {
         res.send(data);

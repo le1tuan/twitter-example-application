@@ -45,10 +45,18 @@ var getUser = (id) => {
 // }
 var directMessageList = () => twitter.get('direct_messages/events/list');
 
+var searchUser = (query) => {
+    return twitter.get('users/search', {
+        q: query,
+        count: 2,
+    });
+}
+
 module.exports = {
     getUserTimeLine,
     getFavoriteList,
     searchTweets,
     directMessageList,
-    getUser
+    getUser,
+    searchUser
 };

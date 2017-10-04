@@ -9,25 +9,26 @@ class Message extends React.Component {
         };
         this.socket = io('http://localhost:4000');
         this.socket.on('new_message', (data) => {
-            console.log('-------------');
             this.setState((state) => {
                 return {
                     message: state.message.concat(data)
                 }
-            })
-            console.log('sauuu', this.state)
+            });
         })
-    }
-    componentDidMount(){
     }
     render(){
-        const content = this.state.message.map(x => {
-            return <div>{x.screen_name} : {x.text}</div>
-        })
+        console.log(this.state.message);
+        const result = this.state.message.filter( x => {
+            return x.recipient_id == this.props.id;
+        });
+        console.log(result);
+        const content = result.map(x => {
+            return <div key={x.message_id}>{x.screen_name} : {x.text}</div>
+        });
         return(
             <div>
                 <div>
-                {content}
+                    {content}
                 </div>
             </div>
         )

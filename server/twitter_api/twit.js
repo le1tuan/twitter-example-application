@@ -24,10 +24,11 @@ var createMessage = (id, text) => {
 }
 var directMessageStream = (callback) => {
     streamUser.on('direct_message', (message) => {
-        console.log('newwwww messsage');
         const data = {
+            recipient_id: message.direct_message.recipient_id,
             text: message.direct_message.text,
             screen_name: message.direct_message.sender.screen_name,
+            message_id: message.direct_message.id,
         }
         callback(data);
     });
