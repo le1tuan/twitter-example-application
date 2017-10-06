@@ -33,6 +33,7 @@ function Twitter(options) {
       headers: {
         Accept: '*/*',
         Connection: 'close',
+        'Content-Type': 'application/json',
         'User-Agent': 'node-twitter/' + VERSION
       }
     }
