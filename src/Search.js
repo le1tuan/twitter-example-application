@@ -1,6 +1,9 @@
 import React from 'react';
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
+import { searchingUser } from './actions';
+import { connect } from 'react-redux';
+
 class Search extends React.Component {
     constructor(props){
         super(props);
@@ -13,24 +16,20 @@ class Search extends React.Component {
     handleChange = (e) => {
         e.preventDefault();
         clearTimeout(this.timeOut);
-        const data = e.target.value;
-        this.timeOut = setTimeout(() => {
-            fetch(`${this.baseUrl}users/search?q=${data}`)
-            .then(res => {
-                return res.json()
-            })
-            .then(res => {
-                this.setState({
-                    list: res
-                })
-            })
-            .catch(e => {
-                console.log(e);
-            })
-        },1000);
+        let data = e.target.value;
+        const trimDatra = data.trim();
+        console.log(trimDatra.length);
+        if(trimDatra.length > 0){
+            this.timeOut = setTimeout(() => {
+                this.props.requestSearching({
+                    query: data,
+                });
+            },1000);
+        }    
     }
     render(){
-        const content = this.state.list.map(x => {
+        console.log(this.props.searchResult)
+        const content = this.props.searchResult.map(x => {
             return (<div key={x.id}>
                         <img src={x.profile_image_url}/>
                         <p>{x.screen_name}</p>
@@ -51,4 +50,18 @@ class Search extends React.Component {
         )
     }
 }
-export default Search;
+
+function mapDispatchToProps(dispatch) {
+    return {
+        requestSearching: (payload) => {
+            dispatch(searchingUser(payload))
+        }
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        searchResult: state.searchingReducer.searchResult
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Search);

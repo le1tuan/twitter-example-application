@@ -27,27 +27,35 @@ var getUser = (id) => {
         user_id: id,
     })
 }
-// var createMessage = ({id, text}) => {
-//     console.log(id, text);
-//     return twitter.get('direct_messages/events/new',{
-//         event: {
-//           type: "message_create",
-//           message_create: {
-//             target: {
-//               recipient_id: id
-//             },
-//             message_data: {
-//               text: text,
-//             }
-//           }
-//         }
-//     })
-// }
 var directMessageList = () => twitter.get('direct_messages/events/list');
 
 var searchUser = (query) => {
     return twitter.get('users/search', {
         q: query,
+    });
+}
+var createMessage = ({id, text}) => {
+    console.log(id, text);
+    return twitter.get('direct_messages/events/new',{
+        event: {
+          type: "message_create",
+          message_create: {
+            target: {
+              recipient_id: id
+            },
+            message_data: {
+              text: text,
+            }
+          }
+        }
+    })
+}
+var directMessageList = () => twitter.get('direct_messages/events/list');
+
+var searchUser = (query) => {
+    return twitter.get('users/search', {
+        q: query,
+        count: 5,
     });
 }
 
@@ -57,5 +65,6 @@ module.exports = {
     searchTweets,
     directMessageList,
     getUser,
-    searchUser
+    searchUser,
+    createMessage
 };

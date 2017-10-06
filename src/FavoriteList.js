@@ -1,7 +1,8 @@
 import React from 'react';
-import 'whatwg-fetch';
 import Linkify from 'react-linkify';
 import Message from './Message';
+import { connect } from 'react-redux';
+import { sendMessage } from './actions';
 class FavoriteList extends React.PureComponent {
     constructor(props){
         super(props);
@@ -9,25 +10,16 @@ class FavoriteList extends React.PureComponent {
             inputValue: '',
             data: '',
         }
-        this.baseUrl = 'http://localhost:4000/';
         this.timeOut = '';
     }
     componentDidMount(){
     }
     handleSubmit = (e) => {
-        console.log(e);
         e.preventDefault();
-        var url = `${this.baseUrl}direct_messages/events/new`
-        fetch(url,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: this.props.match.params.id,
-                text: this.state.inputValue
-            })
-        });
+        this.props.requestSendMessage({
+            id: this.props.match.params.id,
+            text: this.state.inputValue
+        })
         this.setState({
             inputValue: '',
         })
@@ -51,4 +43,11 @@ class FavoriteList extends React.PureComponent {
     }
 }
 
-export default FavoriteList;
+function mapDispatchToProps(dispatch) {
+    return {
+        requestSendMessage: (payload) => { 
+            dispatch(sendMessage(payload)) 
+        },
+    }
+}
+export default connect(null,mapDispatchToProps)(FavoriteList);
